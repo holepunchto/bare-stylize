@@ -22,12 +22,13 @@ function getStylesMap() {
 
 const stylesMap = getStylesMap()
 
-module.exports = function stylize(styles, text, opts) {
+module.exports = function stylize(styles, text, opts = {}) {
+  const validateStream = opts.validateStream ?? true
+  const stream = opts.stream ?? process.stdout
+
+  if (!validateStream || !stream.isTTY) return text
+
   if (typeof styles === 'string') styles = [styles]
-
-  if (!opts) opts = { validateStream: true, stream: process.stdout }
-
-  if (!opts.validateStream || (opts.stream && !opts.stream.isTTY)) return text
 
   const code = styles.map((style) => stylesMap[style]).join('')
 

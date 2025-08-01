@@ -1,27 +1,30 @@
 const test = require('brittle')
 const { Writable } = require('bare-stream')
+const tty = require('bare-tty')
 const stylize = require('.')
 
-test('basic', (t) => {
-  t.is(stylize('bold', 'hello'), '\x1B[1mhello\x1B[0m', 'modifier')
+const stream = new tty.WriteStream(1)
 
-  t.is(stylize('green', 'hello'), '\x1B[32mhello\x1B[0m', 'color')
+test('basic', (t) => {
+  t.is(stylize('bold', 'hello', { stream }), '\x1B[1mhello\x1B[0m', 'modifier')
+
+  t.is(stylize('green', 'hello', { stream }), '\x1B[32mhello\x1B[0m', 'color')
 
   t.is(
-    stylize(['bold', 'green'], 'hello'),
+    stylize(['bold', 'green'], 'hello', { stream }),
     '\x1B[1m\x1B[32mhello\x1B[0m',
     'multiple'
   )
 })
 
 test('options', (t) => {
-  t.is(stylize('bold', 'hello', { validateStream: false }), 'hello')
+  t.is(stylize('bold', 'hello', { validateStream: false, stream }), 'hello')
 
   t.is(
-    stylize('bold', 'hello', { validateStream: true }),
+    stylize('bold', 'hello', { validateStream: true, stream }),
     '\x1B[1mhello\x1B[0m'
   )
 
-  const stream = new Writable()
-  t.is(stylize('bold', 'hello', { stream }), 'hello')
+  const nonTTYStream = new Writable()
+  t.is(stylize('bold', 'hello', { stream: nonTTYStream }), 'hello')
 })
