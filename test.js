@@ -1,9 +1,7 @@
 const test = require('brittle')
-const { Writable } = require('bare-stream')
-const tty = require('bare-tty')
 const stylize = require('.')
 
-const stream = new tty.WriteStream(1)
+const stream = { isTTY: true } // mock
 
 test('basic', (t) => {
   t.is(stylize('bold', 'hello', { stream }), '\x1B[1mhello\x1B[0m', 'modifier')
@@ -25,6 +23,6 @@ test('options', (t) => {
     '\x1B[1mhello\x1B[0m'
   )
 
-  const nonTTYStream = new Writable()
+  const nonTTYStream = { isTTY: false } // mock
   t.is(stylize('bold', 'hello', { stream: nonTTYStream }), 'hello')
 })
