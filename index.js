@@ -20,14 +20,9 @@ function getStylesMap() {
 }
 
 const stylesMap = getStylesMap()
-const availableStyles = Object.keys(stylesMap)
 
 module.exports = function stylize(styles, text) {
   if (typeof styles === 'string') styles = [styles]
-
-  styles = styles.filter((style) => availableStyles.includes(style))
-
-  if (styles.length === 0) return text
 
   const code = styles.map((style) => stylesMap[style]).join('')
 
