@@ -1,25 +1,35 @@
 const escapes = require('bare-ansi-escapes')
 
-class Stylizer {
-  constructor() {
-    let methodName
+function getStylesMap() {
+  const stylesMap = {}
 
-    for (const escape of Object.getOwnPropertyNames(escapes)) {
-      if (escape.startsWith('color')) {
-        methodName = escape[5].toLowerCase() + escape.slice(6)
-      } else if (escape.startsWith('modifier')) {
-        methodName = escape[8].toLowerCase() + escape.slice(9)
-      } else {
-        continue
-      }
-
-      this[methodName] = (value) => this._apply(escape, value)
+  let style
+  for (const escape of Object.getOwnPropertyNames(escapes)) {
+    if (escape.startsWith('color')) {
+      style = escape[5].toLowerCase() + escape.slice(6)
+    } else if (escape.startsWith('modifier')) {
+      style = escape[8].toLowerCase() + escape.slice(9)
+    } else {
+      continue
     }
+
+    stylesMap[style] = escapes[escape]
   }
 
-  _apply(escape, value) {
-    return escapes[escape] + value + escapes.modifierReset
-  }
+  return stylesMap
 }
 
-module.exports = new Stylizer()
+const stylesMap = getStylesMap()
+const availableStyles = Object.keys(stylesMap)
+
+module.exports = function stylize(styles, text) {
+  if (typeof styles === 'string') styles = [styles]
+
+  styles = styles.filter((style) => availableStyles.includes(style))
+
+  if (styles.length === 0) return text
+
+  const code = styles.map((style) => stylesMap[style]).join('')
+
+  return code + text + escapes.modifierReset
+}
