@@ -1,4 +1,5 @@
 const escapes = require('bare-ansi-escapes')
+const process = require('bare-process')
 
 function getStylesMap() {
   const stylesMap = {}
@@ -21,8 +22,12 @@ function getStylesMap() {
 
 const stylesMap = getStylesMap()
 
-module.exports = function stylize(styles, text) {
+module.exports = function stylize(styles, text, opts) {
   if (typeof styles === 'string') styles = [styles]
+
+  if (!opts) opts = { validateStream: true, stream: process.stdout }
+
+  if (!opts.validateStream || (opts.stream && !opts.stream.isTTY)) return text
 
   const code = styles.map((style) => stylesMap[style]).join('')
 

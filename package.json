@@ -25,9 +25,11 @@
   },
   "homepage": "https://github.com/holepunchto/bare-stylize#readme",
   "dependencies": {
-    "bare-ansi-escapes": "^2.2.3"
+    "bare-ansi-escapes": "^2.2.3",
+    "bare-process": "^4.2.1"
   },
   "devDependencies": {
+    "bare-stream": "^2.6.5",
     "brittle": "^3.3.2",
     "prettier": "^3.4.2",
     "prettier-config-standard": "^7.0.0"
