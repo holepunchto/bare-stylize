@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/holepunchto/bare-stylize#readme",
   "dependencies": {
-    "bare-ansi-escapes": "^2.2.3"
+    "bare-ansi-escapes": "^2.2.3",
+    "bare-process": "^4.2.1"
   },
   "devDependencies": {
     "brittle": "^3.3.2",
