@@ -11,7 +11,8 @@ npm i bare-stylize
 ```js
 const stylize = require('bare-stylize')
 
-console.log(stylize.bold(stylize.green('ok')))
+console.log(stylize('green', 'ok'))
+console.log(stylize(['bold', 'red'], 'error'))
 ```
 
 ## License
